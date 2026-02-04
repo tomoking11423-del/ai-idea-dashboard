@@ -154,9 +154,34 @@ export default function AIIdeaDashboard() {
     }
   };
 
-  const updateStatus = (id, status) => {
+  const updateStatus = async (id, status) => {
+    const idea = ideas.find(i => i.id === id);
     setIdeas(ideas.map(i => i.id === id ? { ...i, status } : i));
     setShowStatusSheet(null);
+
+    // 「実行する」に変更した場合、APIを呼び出す
+    if (status === 'approved' && idea) {
+      try {
+        const response = await fetch('http://localhost:3002/api/ai-projects', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: 'ebaa4937-c294-4046-b666-c46fddb9b605',
+            title: idea.title,
+            description: idea.description,
+            external_id: String(idea.id),
+          }),
+        });
+
+        if (!response.ok) {
+          console.error('API Error:', response.status);
+        }
+      } catch (error) {
+        console.error('Failed to call API:', error);
+      }
+    }
   };
 
   const togglePin = (id) => {
