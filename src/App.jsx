@@ -80,8 +80,13 @@ export default function AIIdeaDashboard() {
   const [showActionSheet, setShowActionSheet] = useState(null);
   const [showStatusSheet, setShowStatusSheet] = useState(null);
   const [showFilterSheet, setShowFilterSheet] = useState(false);
-  const [detailIdea, setDetailIdea] = useState(null);
+  const [detailIdeaId, setDetailIdeaId] = useState(null);
   const fileInputRef = useRef(null);
+
+  // 詳細表示中のアイデアを最新の状態から取得
+  const detailIdea = useMemo(() => {
+    return detailIdeaId ? ideas.find(i => i.id === detailIdeaId) : null;
+  }, [detailIdeaId, ideas]);
 
   // Save to localStorage
   useEffect(() => {
@@ -150,7 +155,7 @@ export default function AIIdeaDashboard() {
     if (confirm('このアイデアを削除しますか？')) {
       setIdeas(ideas.filter(i => i.id !== id));
       setShowActionSheet(null);
-      setDetailIdea(null);
+      setDetailIdeaId(null);
     }
   };
 
@@ -280,7 +285,7 @@ export default function AIIdeaDashboard() {
     return (
       <div
         className={`bg-white rounded-2xl p-4 mb-3 shadow-sm border border-gray-100 active:scale-[0.98] transition-transform ${idea.pinned ? 'ring-2 ring-purple-400' : ''}`}
-        onClick={() => setDetailIdea(idea)}
+        onClick={() => setDetailIdeaId(idea.id)}
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -377,7 +382,7 @@ export default function AIIdeaDashboard() {
                   <div
                     key={idea.id}
                     className="bg-white rounded-xl p-3 shadow-sm border border-gray-100"
-                    onClick={() => setDetailIdea(idea)}
+                    onClick={() => setDetailIdeaId(idea.id)}
                   >
                     <h4 className="font-semibold text-gray-900 text-sm mb-1">{idea.title}</h4>
                     <p className="text-xs text-gray-500 line-clamp-2">{idea.description}</p>
@@ -397,11 +402,11 @@ export default function AIIdeaDashboard() {
 
     return (
       <div className="fixed inset-0 z-50 flex items-end justify-center">
-        <div className="absolute inset-0 bg-black/60" onClick={() => setDetailIdea(null)} />
+        <div className="absolute inset-0 bg-black/60" onClick={() => setDetailIdeaId(null)} />
         <div className="relative bg-white rounded-t-3xl w-full max-h-[90vh] overflow-hidden animate-slide-up">
           {/* Header */}
           <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between">
-            <button onClick={() => setDetailIdea(null)} className="text-purple-600 font-medium">閉じる</button>
+            <button onClick={() => setDetailIdeaId(null)} className="text-purple-600 font-medium">閉じる</button>
             <button onClick={() => setShowActionSheet(idea.id)} className="text-purple-600 font-medium">操作</button>
           </div>
 
@@ -533,7 +538,7 @@ export default function AIIdeaDashboard() {
               {idea.pinned ? 'ピン留め解除' : 'ピン留め'}
             </button>
             <button
-              onClick={() => { openModal(idea); setShowActionSheet(null); setDetailIdea(null); }}
+              onClick={() => { openModal(idea); setShowActionSheet(null); setDetailIdeaId(null); }}
               className="w-full px-6 py-4 text-center text-purple-600 font-medium text-lg border-b border-gray-100 active:bg-gray-50"
             >
               編集
