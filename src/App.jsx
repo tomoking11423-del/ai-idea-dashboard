@@ -167,7 +167,7 @@ export default function AIIdeaDashboard() {
     // 「実行する」に変更した場合、APIを呼び出す
     if (status === 'approved' && idea) {
       try {
-        const response = await fetch('http://localhost:3002/api/ai-projects', {
+        const response = await fetch('https://business-dashboard-opal-nine.vercel.app/api/ai-projects', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
