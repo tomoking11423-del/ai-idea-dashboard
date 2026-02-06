@@ -173,7 +173,7 @@ export default function AIIdeaDashboard() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            user_id: '8079054c-257f-4981-9233-bd9d1d1a4f17',
+            user_id: '215f5512-98d8-4895-b150-5b63443c3db8',
             title: idea.title,
             description: idea.description,
             external_id: String(idea.id),
